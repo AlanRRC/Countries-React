@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import "./styles.css";
+function Region({ region }) {
+  return <sup>{region === "" ? "None" : region}</sup>;
+}
 
-function App() {
+function Country({ country }) {
+  const density = country.population / country.area;
+  const globalAverageDensity = 50; // People per km2.
+  const isDense = density > globalAverageDensity;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <details>
+      <summary>
+        <img src={country.flags.png} alt="" /> {country.name.common}
+      </summary>
+      <p>
+        <Region region={country.region} />
+        <sup>Population: {country.population}</sup>
+        <sup>Area: {country.area} km²</sup>
+        {isDense && <sup>Densely Populated</sup>}
+      </p>
+    </details>
   );
 }
 
-export default App;
+// App renders one Country component per country.
+export default function App({ countries }) {
+  return (
+    <div>
+      {countries.map((c, i) => (
+        <Country key={i} country={c} />
+      ))}
+    </div>
+  );
+}

@@ -1,17 +1,20 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import { createRoot } from 'react-dom/client';
+
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import 'mvp.css'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+(async function () {
+  // Fetch API data on world countries.
+  const url =
+    "https://gist.githubusercontent.com/stungeye/e34eee4f6665a077d320e15e2910b97a/raw/841669883105d05ce8536cfa37ca8518205cdd83/countriesv3_1_filtered.json";
+  const apiResponse = await fetch(url);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  // Parse response JSON into an array.
+  const countries = await apiResponse.json();
+
+  // Render the App component to the div#root in markup.
+  const container = document.getElementById("app");
+  const root = createRoot(container);
+  root.render(<App countries={countries} />);
+})();
